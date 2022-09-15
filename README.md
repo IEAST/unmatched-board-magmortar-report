@@ -35,8 +35,22 @@ magmortar 之前的工作环境在机柜内，相对室内温度较高。我们�
 目前新刷入 SD Card 的固件和系统是无法正常启动的，在 bootloader 运行 `run bootcmd_mmc0` 命令从 SD Card 启动系统会在 `Starting Kernel`
 提示信息出来之后卡死。
 
-尝试更换 SD Card 刷入，问题依旧重现，所以不是 SD Card 的问题。尝试将出问题的 SD Card 插入其他 Unmatched 板子，问题依旧复现，说明和
-magmortar 本身出现的问题无关。因此目前怀疑崩溃问题与 kernel 本身有关，仍需后续的调试和调查。
+尝试：
+
+- 更换 SD Card 刷入固件，问题依旧重现。
+- 将该 SD Card 插入其他 Unmatched 板子，Kernel 依旧起不来，说明 SD Card 和 magmortar 本身出现的问题无关。
+
+目前怀疑崩溃问题与 kernel 本身有关，仍需后续的调试和调查。
+
+但抛去 Kernel 起不来的问题，在起 Kernel 卡死的时候，其他的板子只是 `Starting Kernel` 然后卡死，而 magmortar 会多汇报一句
+`L2Cache: Data Error`.
+
+验证方案（来自 @sequencer)
+
+> 硬件问题我想过唯二的两个情况：
+> 1. MMC的坏块在 trap_handler 中导致中断无法处理，原来的卡死问题如果和温度无关的话我怀疑就到这里了。
+> 2. L2 缓存有坏块，然后在kernel 在init L2 Cache的时候Data Error是不是指的这个问题
+> L2缓存坏块的验证方案是： 用sideband对L2的SRAM执行load/store 或者JTAG用SBA去access对应的地址
 
 ### 无法从 SPI 启动
 
