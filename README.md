@@ -1,4 +1,6 @@
-# Magmortar Debug Notes
+# Magmortar(HiFive Unmatched) Debug Notes
+
+PS: 本文中 larvesta, reshiram, magmortar 均为 Unmatched.
 
 ## Issue
 
